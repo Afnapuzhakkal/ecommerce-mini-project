@@ -1,0 +1,43 @@
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  padding: 20px;
+}
+
+/* CARD */
+.product-card {
+  border: 1px solid #ddd;
+  padding: 15px;
+  text-align: center;
+  border-radius: 10px;
+  background: white;
+  transition: 0.3s;
+}
+
+.product-card:hover {
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  transform: scale(1.03);
+}
+
+/* IMAGE */
+.product-card img {
+  height: 150px;
+  object-fit: contain;
+}
+
+/* PRICE */
+.price {
+  color: green;
+  font-weight: bold;
+}
+
+/* BUTTON */
+.view-btn {
+  background-color: violet;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  margin-top: 10px;
+  cursor: pointer;
+}

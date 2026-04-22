@@ -1,0 +1,28 @@
+.detail-container{
+    display: flex;
+    gap: 40px;
+    padding: 40px;
+}
+
+.detail-container img {
+  width: 300px;
+}
+
+.detail-container h2 {
+  margin-bottom: 10px;
+}
+ .detail-container button {
+    padding: 10px;
+    border-radius: 5px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: blueviolet;
+    background-color: antiquewhite;
+}
+
+button:hover{
+    background-color:rgb(241, 208, 165)
+}
+button{
+  padding: 20px;
+  margin: 10px;
+}
