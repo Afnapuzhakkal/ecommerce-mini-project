@@ -1,5 +1,5 @@
 import React from 'react'
-import ProductList from '../Components/ProductList'
+// import ProductList from '../Components/ProductList'
 import Hero from '../Components/Hero'
 import "./Home.css"
 import Popular from '../Components/Popular/Popular'
