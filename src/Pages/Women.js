@@ -1,35 +1,48 @@
-import React, { useEffect, useState } from 'react';
-import ProductCard from '../Components/ProductCard';
-import './Women.css';
+
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import ProductCard from "../Components/ProductCard";
+import { fetchProducts } from "../redux/slices/productsSlice";
+import "./Women.css";
 
 function Women() {
-  const [products, setProducts] = useState([]);
+  const dispatch = useDispatch();
+
+  const { items: products, loading, error } = useSelector(
+    (state) => state.products
+  );
 
   useEffect(() => {
-  Promise.all([
-    fetch("https://dummyjson.com/products/category/womens-dresses").then(res => res.json()),
-    fetch("https://dummyjson.com/products/category/womens-shoes").then(res => res.json()),
-    fetch("https://dummyjson.com/products/category/womens-bags").then(res => res.json())
-  ])
-  .then(([dresses, shoes, bags]) => {
-    const all = [
-      ...dresses.products,
-      ...shoes.products,
-      ...bags.products
-    ];
-    setProducts(all);
-  });
-}, []);
-  
+    if (products.length === 0) {
+      dispatch(fetchProducts());
+    }
+  }, [dispatch, products.length]);
 
-  
+  const womenCategories = [
+    "womens-dresses",
+    "womens-shoes",
+    "womens-bags",
+  ];
+
+  const womenProducts = products.filter((item) =>
+    womenCategories.includes(item.category)
+  );
+
+  if (loading && products.length === 0) {
+    return <p>Loading women's products...</p>;
+  }
+
+  if (error) {
+    return <p>Error loading products: {error}</p>;
+  }
+
   return (
     <div>
       <h2 className="women-title">Women Collection</h2>
 
       <div className="product-grid">
-        {products.map((item, index) => (
-          <ProductCard key={index} product={item} />
+        {womenProducts.map((item) => (
+          <ProductCard key={item.id} product={item} />
         ))}
       </div>
     </div>

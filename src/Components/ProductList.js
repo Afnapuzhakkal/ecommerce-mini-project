@@ -1,19 +1,31 @@
-import React, { useEffect, useState } from "react";
+
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import ProductCard from "./ProductCard";
+import { fetchProducts } from "../redux/slices/productsSlice";
 
 function ProductList() {
-  const [products, setProducts] = useState([]);
+  const dispatch = useDispatch();
+
+  const { items: products, loading, error } = useSelector(
+    (state) => state.products
+  );
 
   useEffect(() => {
-    fetch("https://dummyjson.com/products")
-      .then(res => res.json())
-      .then(data => setProducts(data.products)) // ⚠️ important
-      .catch(err => console.log(err));
-  }, []);
+    dispatch(fetchProducts());
+  }, [dispatch]);
+
+  if (loading) {
+    return <p>Loading products...</p>;
+  }
+
+  if (error) {
+    return <p>Error: {error}</p>;
+  }
 
   return (
     <div className="product-grid">
-      {products.map(item => (
+      {products.map((item) => (
         <ProductCard key={item.id} product={item} />
       ))}
     </div>

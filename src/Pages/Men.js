@@ -1,12 +1,24 @@
-import { useEffect, useState } from "react";
+
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import ProductCard from "../Components/ProductCard";
-import './Men.css';
+import { fetchProducts } from "../redux/slices/productsSlice";
+import "./Men.css";
 
 function Men() {
-  const [products, setProducts] = useState([]);
+  const dispatch = useDispatch();
 
+  const { items: products, loading, error } = useSelector(
+    (state) => state.products
+  );
 
-  //ADD TO WHISHLIST
+  useEffect(() => {
+    if (products.length === 0) {
+      dispatch(fetchProducts());
+    }
+  }, [dispatch, products.length]);
+
+  // ADD TO WISHLIST
   const addToWishlist = (product) => {
     let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
 
@@ -15,41 +27,38 @@ function Men() {
     if (!exists) {
       wishlist.push(product);
       localStorage.setItem("wishlist", JSON.stringify(wishlist));
-      alert("Added to Wishlist ");
+      alert("Added to Wishlist");
     } else {
-      alert("Already in Wishlist ");
+      alert("Already in Wishlist");
     }
   };
-  
 
-  useEffect(() => {
-  fetch("https://dummyjson.com/products?limit=100")
-    .then(res => res.json())
-    .then(data => {
-      console.log(data.products);
+  const menProducts = products.filter(
+    (item) =>
+      item.category.includes("mens") ||
+      item.category.includes("shirts") ||
+      item.category.includes("shoes")
+  );
 
-      const menProducts = data.products.filter(item =>
-        item.category.includes("mens") ||
-        item.category.includes("shirts") ||
-        item.category.includes("shoes")
-      );
+  if (loading && products.length === 0) {
+    return <p>Loading men's products...</p>;
+  }
 
-      setProducts(menProducts);
-    })
-    .catch(err => {
-      console.log(err);
-    });
-}, []);
+  if (error) {
+    return <p>Error loading products: {error}</p>;
+  }
 
-  
   return (
     <div>
       <h2 className="men-title">Men Collection</h2>
 
       <div className="product-grid">
-        {products.map((item, index) => (
-          <ProductCard key={index} product={item} 
-          addToWishlist={addToWishlist}/>
+        {menProducts.map((item) => (
+          <ProductCard
+            key={item.id}
+            product={item}
+            addToWishlist={addToWishlist}
+          />
         ))}
       </div>
     </div>
